@@ -5,7 +5,7 @@ Esta guía permite instalar Support Desk desde una copia limpia en una computado
 ## Requisitos
 
 - Git.
-- PHP 8.3 o posterior con `ctype`, `curl`, `dom`, `fileinfo`, `mbstring`, `openssl`, `pdo_sqlite`, `tokenizer`, `xml` y `zip` habilitados.
+- PHP 8.4.1 o posterior con `ctype`, `curl`, `dom`, `fileinfo`, `mbstring`, `openssl`, `pdo_sqlite`, `tokenizer`, `xml` y `zip` habilitados.
 - Composer 2.
 - Node.js 20.19+ (recomendado: Node 24) y npm.
 

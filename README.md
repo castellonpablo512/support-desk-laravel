@@ -14,7 +14,7 @@ Consulta la [guía de instalación, ejecución y pruebas](backend/README.md). La
 
 ## Tecnologías
 
-PHP 8.3+, Laravel 13, React, MUI, Vite y SQLite por defecto. El esquema también está preparado para MySQL.
+PHP 8.4.1+, Laravel 13, React, MUI, Vite y SQLite por defecto. El esquema también está preparado para MySQL.
 
 ## Alcance de la primera versión
 
