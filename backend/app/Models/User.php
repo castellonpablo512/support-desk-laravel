@@ -17,6 +17,13 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    protected $attributes = ['role' => 'requester'];
+
+    public function isSupport(): bool
+    {
+        return $this->role === 'support';
+    }
+
     /**
      * Get the attributes that should be cast.
      *
