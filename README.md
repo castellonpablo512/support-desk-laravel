@@ -1,21 +1,20 @@
 # Support Desk
 
-Sistema web de gestión de incidencias desarrollado como proyecto de entrenamiento full-stack.
+Sistema web para registrar, asignar y atender incidencias. Incluye una interfaz React y MUI servida por Laravel, una API protegida con sesiones y una base SQLite lista para desarrollo local. También admite MySQL para instalaciones compartidas.
+
+## Primeros pasos
+
+Consulta la [guía de instalación, ejecución y pruebas](backend/README.md). La guía cubre Windows, requisitos, instalación limpia, creación de una cuenta de soporte y flujo de prueba con dos cuentas.
+
+## Funciones
+
+- Solicitantes pueden registrarse, crear incidencias, ver solo las propias y conversar con soporte.
+- El equipo de soporte puede consultar y filtrar la cola, asignar responsables, cambiar la prioridad y actualizar el estado.
+- Los cambios se protegen con autenticación de sesión y CSRF; las reglas de rol se aplican en el servidor.
 
 ## Tecnologías
 
-- PHP
-- Laravel
-- MySQL
-- React
-- JavaScript
-- MUI
-
-## Arquitectura
-
-El proyecto utiliza una arquitectura headless:
-
-React → REST API → Laravel → MySQL
+PHP 8.3+, Laravel 13, React, MUI, Vite y SQLite por defecto. El esquema también está preparado para MySQL.
 
 ## Alcance de la primera versión
 
