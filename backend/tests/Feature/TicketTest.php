@@ -45,6 +45,7 @@ class TicketTest extends TestCase
         ]);
         $this->actingAs($support);
 
+        $this->getJson('/api/support-users')->assertOk()->assertJsonPath('data.0.id', $support->id);
         $this->getJson('/api/tickets?status=open')->assertOk()->assertJsonCount(1, 'data');
         $this->patchJson('/api/tickets/'.$ticket->id, [
             'status' => 'in_progress',
@@ -66,6 +67,7 @@ class TicketTest extends TestCase
         ]);
         $this->actingAs($requester);
 
+        $this->getJson('/api/support-users')->assertForbidden();
         $this->patchJson('/api/tickets/'.$ticket->id, ['status' => 'closed'])->assertForbidden();
         $this->postJson('/api/tickets/'.$ticket->id.'/comments', ['body' => '¿Hay novedades?'])
             ->assertCreated()
