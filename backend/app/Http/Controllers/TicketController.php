@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -10,6 +11,16 @@ use Illuminate\Validation\Rule;
 
 class TicketController extends Controller
 {
+    public function supportUsers(Request $request): JsonResponse
+    {
+        abort_unless($request->user()->isSupport(), 403);
+
+        return response()->json(['data' => User::query()
+            ->where('role', 'support')
+            ->orderBy('name')
+            ->get(['id', 'name'])]);
+    }
+
     public function index(Request $request): JsonResponse
     {
         $user = $request->user();

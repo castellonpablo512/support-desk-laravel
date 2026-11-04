@@ -16,6 +16,7 @@ Route::prefix('api')->group(function () {
         Route::get('user', [SessionController::class, 'show']);
         Route::post('logout', [SessionController::class, 'logout']);
         Route::get('tickets', [TicketController::class, 'index']);
+        Route::get('support-users', [TicketController::class, 'supportUsers']);
         Route::post('tickets', [TicketController::class, 'store']);
         Route::get('tickets/{ticket}', [TicketController::class, 'show']);
         Route::patch('tickets/{ticket}', [TicketController::class, 'update']);
