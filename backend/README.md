@@ -1,58 +1,109 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Guía de instalación y uso
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Esta guía permite instalar Support Desk desde una copia limpia en una computadora de desarrollo. En el modo local usa SQLite, así que no necesita instalar un servidor MySQL.
 
-## About Laravel
+## Requisitos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Git.
+- PHP 8.4.1 o posterior con `ctype`, `curl`, `dom`, `fileinfo`, `mbstring`, `openssl`, `pdo_sqlite`, `tokenizer`, `xml` y `zip` habilitados.
+- Composer 2.
+- Node.js 20.19+ (recomendado: Node 24) y npm.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+En Windows puedes usar PHP y Composer del instalador oficial de Composer. Comprueba las herramientas desde PowerShell:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```powershell
+php -v
+php -m
+composer --version
+node --version
+npm --version
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+En la salida de `php -m` debe aparecer `pdo_sqlite`.
 
-## Contributing
+## Instalación limpia
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Clona el repositorio y ejecuta la configuración:
 
-## Code of Conduct
+```powershell
+git clone https://github.com/castellonpablo512/support-desk-laravel.git
+cd support-desk-laravel/backend
+composer run setup
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+El comando instala las dependencias, crea `.env`, genera una clave de cifrado, crea la base SQLite, ejecuta las migraciones y compila React. Si la instalación se interrumpe, vuelve a ejecutar los pasos manuales desde la carpeta `backend`:
 
-## Security Vulnerabilities
+```powershell
+composer install
+Copy-Item .env.example .env
+php artisan key:generate
+New-Item -ItemType File -Force database/database.sqlite
+php artisan migrate
+npm ci
+npm run build
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Si ya existe `.env`, no lo reemplaces; ejecuta solamente los pasos que aún falten.
 
-## License
+## Iniciar la aplicación
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Desde `backend`:
+
+```powershell
+composer run dev
+```
+
+Abre [http://localhost:8000](http://localhost:8000). Para detener los servidores, usa `Ctrl+C`.
+
+También puedes iniciar Laravel y Vite en terminales separadas:
+
+```powershell
+php artisan serve
+npm run dev
+```
+
+## Probar el flujo
+
+1. Registra una cuenta con nombre, correo y contraseña de al menos 12 caracteres.
+2. Crea una incidencia con asunto y descripción. Ábrela y añade un comentario.
+3. En otra terminal, habilita una cuenta existente para soporte:
+
+   ```powershell
+   php artisan support:grant correo@ejemplo.com
+   ```
+
+4. Cierra sesión e inicia con esa cuenta. Verás la cola; abre una incidencia, asigna un responsable y prueba los selectores de prioridad y estado.
+5. Regresa a la cuenta solicitante y confirma que puede ver y comentar en sus solicitudes.
+
+Las cuentas públicas empiezan como solicitantes. Solo el comando de consola concede el rol de soporte.
+
+## Pruebas y compilación
+
+```powershell
+php artisan test
+php vendor/bin/pint --test
+npm run build
+```
+
+La suite comprueba registro e inicio de sesión, separación de permisos, creación y consulta de incidencias, asignación, cambios de estado y comentarios.
+
+## Base de datos MySQL
+
+SQLite es suficiente para probar en una computadora. Para una instalación compartida, crea una base de datos MySQL y actualiza `.env`:
+
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=support_desk
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_contraseña
+```
+
+Habilita `pdo_mysql` en PHP y luego ejecuta `php artisan migrate --force`. No publiques `.env` ni guardes contraseñas de base de datos en Git.
+
+## Datos locales
+
+SQLite conserva la información en `database/database.sqlite`. Para reiniciar los datos de desarrollo, detén la aplicación y ejecuta `php artisan migrate:fresh`. Este comando elimina todos los datos de esa base.
+
+La aplicación no configura por sí sola HTTPS, correo, copias de seguridad ni infraestructura de producción.
